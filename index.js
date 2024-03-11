@@ -16,6 +16,17 @@ const connection = mysql.createConnection(
 	console.log(`Connected to the employeetracker_db database.`)
 );
 
+function logo() {
+	console.log(' _______                  __                               _______                   __               ');
+	console.log('|    ___|.--------.-----.|  |.-----.--.--.-----.-----.    |_     _|.----.---.-.----.|  |--.-----.----.');
+	console.log('|    ___||        |  _  ||  ||  _  |  |  |  -__|  -__|      |   |  |   _|  _  |  __||    <|  -__|   _|');
+	console.log('|_______||__|__|__|   __||__||_____|___  |_____|_____|      |___|  |__| |___._|____||__|__|_____|__|  ');
+	console.log('                  |__|             |_____|                                                            ');
+	start();
+};
+
+logo();
+
 function start() {
 	inquirer
 		.prompt([

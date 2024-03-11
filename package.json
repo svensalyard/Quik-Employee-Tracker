@@ -1,0 +1,22 @@
+{
+  "name": "quik-employee-tracker",
+  "version": "1.0.0",
+  "description": "A quik employee management software.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svensalyard/Quik-Employee-Tracker.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Sven Salyard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/svensalyard/Quik-Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/svensalyard/Quik-Employee-Tracker#readme"
+}
