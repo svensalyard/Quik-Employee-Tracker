@@ -16,6 +16,7 @@ const connection = mysql.createConnection(
 	console.log(`Connected to the employeetracker_db database.`)
 );
 
+// Greets user with a logo
 function logo() {
 	console.log(' _______                  __                               _______                   __               ');
 	console.log('|    ___|.--------.-----.|  |.-----.--.--.-----.-----.    |_     _|.----.---.-.----.|  |--.-----.----.');
@@ -25,8 +26,10 @@ function logo() {
 	start();
 };
 
+// initial app call
 logo();
 
+// begins after logo to first query the user with inquirer on what they want to do
 function start() {
 	inquirer
 		.prompt([
@@ -97,7 +100,7 @@ function start() {
 		});
 }
 
-// Query database
+// Find all employees
 async function selectEmployees() {
 	return connection.promise().query(`SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
 	FROM employee
@@ -111,6 +114,7 @@ async function selectEmployees() {
 	.catch((error) => console.log(error));
 }
 
+// Find All Roles
 function selectRoles() {
 	return connection.promise().query(`SELECT role.id, role.title, role.salary, department.name AS department 
 	FROM role 
@@ -123,6 +127,7 @@ function selectRoles() {
 	.catch((error) => console.log(error));
 }
 
+// Find All Departments
 function selectDepartments() {
 	return connection.promise().query("SELECT * FROM department;")
 	.then( ([rows]) => {
@@ -133,6 +138,7 @@ function selectDepartments() {
 	.catch((error) => console.log(error));
 }
 
+// Add a New Employee
 function newEmployee() {
 	return connection.promise().query(`SELECT role.title, role.salary, department.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
 	FROM employee
@@ -183,6 +189,7 @@ function newEmployee() {
 })
 }
 
+// Add a new role
 function addRole() {
 	inquirer
 		.prompt([
@@ -224,6 +231,7 @@ function addRole() {
 	});
 }
 
+// Add a new department
 function addDepartment() {
 	inquirer
 		.prompt([
@@ -244,6 +252,7 @@ function addDepartment() {
 		});
 }
 
+// Update a role
 function updateRole() {
   return connection.promise().query(`SELECT employee.id, employee.first_name, employee.last_name, role.id, role.title,
 	FROM employee
