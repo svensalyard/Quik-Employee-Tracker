@@ -1,6 +1,20 @@
+require('dotenv').config();
+
 const path = require('path')
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+
+const connection = mysql.createConnection(
+	{
+		host: "localhost",
+		// MySQL username,
+		user: "root",
+		// MySQL password
+		password: process.env.DB_PASSWORD,
+		database: "employeetracker_db",
+	},
+	console.log(`Connected to the employeetracker_db database.`)
+);
 
 function start() {
 	inquirer
