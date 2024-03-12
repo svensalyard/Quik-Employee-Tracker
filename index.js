@@ -119,7 +119,7 @@ async function selectEmployees() {
 }
 
 // Find All Roles
-function selectRoles() {
+async function selectRoles() {
 	return connection
 		.promise()
 		.query(
@@ -136,7 +136,7 @@ function selectRoles() {
 }
 
 // Find All Departments
-function selectDepartments() {
+async function selectDepartments() {
 	return connection
 		.promise()
 		.query("SELECT * FROM department;")
@@ -149,20 +149,20 @@ function selectDepartments() {
 }
 
 // Add a New Employee
-function newEmployee() {
+async function newEmployee() {
 	return connection
 		.promise()
 		.query(
-			`SELECT role.title, role.salary, department.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name
+			`SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, department.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name, manager.id AS manager_id
 	FROM employee
 	JOIN role ON role.id = employee.role_id
 	JOIN department ON department.id = role.department_id
 	JOIN employee manager ON employee.manager_id = manager.id;`
 		)
 		.then(([rows]) => {
-			console.table([rows]);
-
-			inquirer
+			console.table(rows);})
+			.then(() =>
+					inquirer
 				.prompt([
 					{
 						type: "input",
@@ -184,13 +184,13 @@ function newEmployee() {
 						name: "managerid",
 						message: "What is the id of this employees manager?",
 					},
-				])
+				]))
 				.then((res) => {
 					let employee = {
-						firstname: res.firstname,
-						lastname: res.lastname,
-						role: res.roleid,
-						manager: res.managerid,
+						first_name: res.firstname,
+						last_name: res.lastname,
+						role_id: res.roleid,
+						manager_id: res.managerid,
 					};
 					return connection
 						.promise()
@@ -201,12 +201,10 @@ function newEmployee() {
 						})
 						.then(() => start())
 						.catch((error) => console.log(error));
-				});
-		});
-}
+						});};
 
 // Add a new role
-function addRole() {
+async function addRole() {
 	inquirer
 		.prompt([
 			{
@@ -255,7 +253,7 @@ function addRole() {
 }
 
 // Add a new department
-function addDepartment() {
+async function addDepartment() {
 	inquirer
 		.prompt([
 			{
@@ -278,34 +276,39 @@ function addDepartment() {
 }
 
 // Update a role
-function updateRole() {
+async function updateRole() {
 	return connection
 		.promise()
 		.query(
-			`SELECT employee.id, employee.first_name, employee.last_name, role.id, role.title,
+			`SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, role.salary, department.name AS department, manager.first_name AS manager_first_name, manager.last_name AS manager_last_name, manager.id AS manager_id
 	FROM employee
-	JOIN role ON role.id = employee.role_id;`
+	JOIN role ON role.id = employee.role_id
+	JOIN department ON department.id = role.department_id
+	JOIN employee manager ON employee.manager_id = manager.id;`
 		)
 		.then(([rows]) => {
-			console.table([rows]);
-			inquirer
+			console.table(rows);})
+			.then(() =>
+					inquirer
 				.prompt([
 					{
 						type: "input",
-						name: "employee",
-						message: "Which employeeId do you wnat to update?",
+						name: "employeeid",
+						message: "What is the id of the employee?",
 					},
 					{
 						type: "input",
-						name: "role",
-						message: "Which roleId do you want to give them?",
-					},
-				])
+						name: "roleid",
+						message: "What is the id of this employees new role?",
+					}
+				]))
 				.then((res) => {
-					let role = res.role;
-					let employee = res.employee;
-					connection.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [role, employee]);
-				})
-				.then(() => console.log("Updated employee"), start());
-		});
-}
+					let role_id = res.roleid; let employee_id = res.employeeid;
+					return connection.promise().query(
+						"UPDATE employee SET role_id = ? WHERE id = ?", [role_id, employee_id])			
+						.then(([rows]) => {
+							console.table(rows);
+						})
+						.then(() => start())
+						.catch((error) => console.log(error));
+						});};
